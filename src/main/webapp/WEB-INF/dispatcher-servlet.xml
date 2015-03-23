@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+ 
+	<context:component-scan base-package="com.liferay.oauth.consumer.controller" />
+
+	<util:properties id="applicationConfig" location="classpath:application.properties"/>
+	<context:property-placeholder properties-ref="applicationConfig"/>
+
+	<bean id="oauthServiceConfig" class="com.liferay.oauth.consumer.OAuthServiceConfig">
+		<constructor-arg value="${oauth.api.key}" />
+		<constructor-arg value="${oauth.api.secret}" />
+		<constructor-arg value="${oauth.access.token.endpoint}" />
+		<constructor-arg value="${oauth.authorize.endpoint}" />
+		<constructor-arg value="${oauth.request.token.endpoint}" />
+		<constructor-arg value="${oauth.callback.endpoint}" />
+		<constructor-arg value="${jsonws.notes.endpoint}" />
+		<constructor-arg value="${jsonws.user.endpoint}" />
+	</bean>
+
+	<bean id="oauthUtil" class="com.liferay.oauth.consumer.OAuthUtil">
+		<property name="oAuthServiceConfig" ref="oauthServiceConfig" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+</beans>
